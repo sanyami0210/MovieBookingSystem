@@ -1,0 +1,74 @@
+﻿@model IEnumerable<MovieBookingSystem.Models.MovieModel>
+
+@{
+    ViewBag.Title = "Movies";
+}
+
+<h2>Movies</h2>
+
+<p>
+    @Html.ActionLink(
+        "Add Movie",
+        "Create",
+        "Movie",
+        null,
+        new { @class = "btn btn-primary" })
+</p>
+
+@if (TempData["Message"] != null)
+{
+    <div class="alert alert-success">
+        @TempData["Message"]
+    </div>
+}
+
+<table class="table table-bordered table-striped">
+
+    <tr>
+        <th>Movie ID</th>
+        <th>Movie Name</th>
+        <th>Category</th>
+        <th>Release Date</th>
+        <th>Rate</th>
+        <th>Action</th>
+    </tr>
+
+    @foreach (var movie in Model)
+    {
+        <tr>
+
+            <td>
+                @movie.Movie_ID
+            </td>
+
+            <td>
+                @movie.Movie_name
+            </td>
+
+            <td>
+                @movie.Cat_Type
+            </td>
+
+            <td>
+                @movie.Release_Date.ToString("dd-MM-yyyy")
+            </td>
+
+            <td>
+                @movie.rate
+            </td>
+
+            <td>
+
+                @Html.ActionLink(
+                    "Delete",
+                    "Delete",
+                    "Movie",
+                    new { id = movie.Movie_ID },
+                    new { @class = "btn btn-danger" })
+
+            </td>
+
+        </tr>
+    }
+
+</table>

@@ -1,0 +1,180 @@
+﻿@model MovieBookingSystem.Models.BookingModel
+
+@{
+    ViewBag.Title = "Book Movie";
+}
+
+<h2>Book Movie</h2>
+
+@if (ViewBag.Message != null)
+{
+    <div class="alert alert-danger">
+        @ViewBag.Message
+    </div>
+}
+
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+
+    @Html.ValidationSummary(
+        true,
+        "",
+        new { @class = "text-danger" })
+
+    <div class="form-group">
+
+        @Html.LabelFor(
+            model => model.Cat_ID)
+
+        @Html.DropDownListFor(
+            model => model.Cat_ID,
+            Model.CatList,
+            "Select Category",
+            new
+            {
+                @class = "form-control",
+                id = "Cat_ID"
+            })
+
+        @Html.ValidationMessageFor(
+            model => model.Cat_ID,
+            "",
+            new
+            {
+                @class = "text-danger"
+            })
+
+    </div>
+
+    <br />
+
+    <div class="form-group">
+
+        @Html.LabelFor(
+            model => model.Movie_ID)
+
+        <select id="Movie_ID"
+                name="Movie_ID"
+                class="form-control">
+
+            <option value="">
+                Select Movie
+            </option>
+
+        </select>
+
+        @Html.ValidationMessageFor(
+            model => model.Movie_ID,
+            "",
+            new
+            {
+                @class = "text-danger"
+            })
+
+    </div>
+
+    <br />
+
+    <div class="form-group">
+
+        @Html.LabelFor(
+            model => model.no_of_Tickets)
+
+        @Html.TextBoxFor(
+            model => model.no_of_Tickets,
+            new
+            {
+                @class = "form-control",
+                type = "number",
+                min = "1",
+                max = "10",
+                id = "Tickets"
+            })
+
+        @Html.ValidationMessageFor(
+            model => model.no_of_Tickets,
+            "",
+            new
+            {
+                @class = "text-danger"
+            })
+
+    </div>
+
+    <br />
+
+    <button type="submit"
+            class="btn btn-success">
+        Book Ticket
+    </button>
+}
+
+@section Scripts {
+
+    @Scripts.Render("~/bundles/jquery")
+    @Scripts.Render("~/bundles/jqueryval")
+
+    <script>
+
+        $("#Cat_ID").change(function () {
+
+            var catId = $(this).val();
+
+            $("#Movie_ID").empty();
+
+            $("#Movie_ID").append(
+                $("<option></option>")
+                    .val("")
+                    .html("Select Movie")
+            );
+
+            if (catId !== "") {
+
+                $.ajax({
+
+                    url:
+                        '@Url.Action(
+                            "GetMovies",
+                            "Booking")',
+
+                    type: "GET",
+
+                    data:
+                    {
+                        catId: catId
+                    },
+
+                    success: function (data) {
+
+                        $.each(
+                            data,
+                            function (i, movie) {
+
+                                $("#Movie_ID").append(
+                                    $("<option></option>")
+                                        .val(movie.Value)
+                                        .html(movie.Text)
+                                );
+
+                            }
+                        );
+
+                    },
+
+                    error: function () {
+
+                        alert(
+                            "Unable to load movies."
+                        );
+
+                    }
+
+                });
+
+            }
+
+        });
+
+    </script>
+}

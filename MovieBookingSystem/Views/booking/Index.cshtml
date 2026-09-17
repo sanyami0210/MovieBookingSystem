@@ -1,0 +1,114 @@
+﻿@model IEnumerable<MovieBookingSystem.Models.BookingModel>
+
+@{
+    ViewBag.Title = "My Bookings";
+}
+
+<h2>My Bookings</h2>
+
+<p>
+    @Html.ActionLink(
+        "Book Movie",
+        "Create",
+        "Booking",
+        null,
+        new { @class = "btn btn-primary" })
+</p>
+
+@if (TempData["Message"] != null)
+{
+    <div class="alert alert-success">
+        @TempData["Message"]
+    </div>
+}
+
+<table class="table table-bordered table-striped">
+
+    <tr>
+
+        <th>
+            Booking ID
+        </th>
+
+        <th>
+            Category
+        </th>
+
+        <th>
+            Movie
+        </th>
+
+        <th>
+            Tickets
+        </th>
+
+        <th>
+            Amount
+        </th>
+
+        <th>
+            Action
+        </th>
+
+    </tr>
+
+    @foreach (var booking in Model)
+    {
+        <tr>
+
+            <td>
+                @booking.booking_ID
+            </td>
+
+            <td>
+                @booking.Cat_ID
+            </td>
+
+            <td>
+                @booking.Movie_ID
+            </td>
+
+            <td>
+                @booking.no_of_Tickets
+            </td>
+
+            <td>
+                @booking.amount
+            </td>
+
+            <td>
+
+                @Html.ActionLink(
+                    "Edit",
+                    "Edit",
+                    "Booking",
+                    new
+                    {
+                        id = booking.booking_ID
+                    },
+                    new
+                    {
+                        @class = "btn btn-warning"
+                    })
+
+                &nbsp;
+
+                @Html.ActionLink(
+                    "Delete",
+                    "Delete",
+                    "Booking",
+                    new
+                    {
+                        id = booking.booking_ID
+                    },
+                    new
+                    {
+                        @class = "btn btn-danger"
+                    })
+
+            </td>
+
+        </tr>
+    }
+
+</table>
